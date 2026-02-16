@@ -24,6 +24,7 @@ public class SlottedPage {
     }
 
 
+    // ---------------- Buffer helpers ----------------
     private int readInt(int offset){
         ByteBuffer buffer = ByteBuffer.wrap(page.getData());
         return buffer.getInt(offset);
@@ -35,6 +36,7 @@ public class SlottedPage {
     }
 
 
+    // ---------------- Header helpers ----------------
     public int getRecordCount(){
         return readInt(RECORD_COUNT_OFFSET);
     }
@@ -47,4 +49,34 @@ public class SlottedPage {
     public void setFreeSpaceOffset(int value){
         writeInt(FREE_SPACE_OFFSET_OFFSET, value);
     }
+
+
+    public int insertRecord(byte[] recordData){
+        int recordSize = recordData.length;
+        int freeOffset = getFreeSpaceOffset();
+        int recordCount = getRecordCount();
+
+        System.arraycopy(
+            recordData,
+            0,
+            page.getData(),
+            freeOffset,
+            recordSize
+        );
+
+        // slotPos = pageSize - (slotIndex + 1) * 4
+        // eg slot 0 = 4096 - (0 + 1) * 4 = 4092
+        int slotPosition = getPageSize() - (recordCount + 1) * 4;
+        writeInt(slotPosition, freeOffset);
+
+        setRecordCount(recordCount + 1);
+        setFreeSpaceOffset(recordSize + freeOffset);
+        page.markDirty();
+        return freeOffset; // recordCount is our ID rn
+    }
+
+    private int getPageSize() {
+        return page.getData().length;
+    }   
+
 }
