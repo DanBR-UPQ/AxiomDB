@@ -1,10 +1,9 @@
 
-
 public class Page {
     public static final int PAGE_SIZE = 4096;
     
     private int pageId = 0;
-    private byte[] data;
+    private final byte[] data;
     private boolean dirty;
     private int pinCount;
 
@@ -23,9 +22,6 @@ public class Page {
     public void unpin(){
         pinCount--;
     }
-
-
-
     public void markDirty(){
         dirty = true;
     }
