@@ -17,7 +17,7 @@ public class SlottedPage {
     }
 
     private void initializeIfEmpty(){
-        if (getRecordCount() == 0 && getFreeSpaceOffset() == 0) { 
+        if (getFreeSpaceOffset() == 0) { 
             setRecordCount(0);
             setFreeSpaceOffset(HEADER_SIZE);
         }
@@ -61,7 +61,7 @@ public class SlottedPage {
         return getPageSize() - (slotIndex + 1) * 4;
     }
 
-    private int getSlotOffset(int slotIndex){ // slot 0 = record starts at 8 byters for example
+    private int getSlotOffset(int slotIndex){ // slot 0 = 8 record starts at 8 bytes for example
         int slotPosition = getSlotPosition(slotIndex);
         return readInt(slotPosition);
     }
@@ -94,14 +94,14 @@ public class SlottedPage {
         setRecordCount(recordCount + 1);
         setFreeSpaceOffset(recordSize + freeOffset);
         page.markDirty();
-        return freeOffset; // freeOffset acts as our ID as it's where the data is stored rn
+        return recordCount; // recordCount is our slot ID
     }
 
 
     public byte[] readRecord(int slotIndex, int recordSize){
         byte[] record = new byte[recordSize];
 
-        if(slotIndex < 0 || slotIndex > getRecordCount()){
+        if(slotIndex < 0 || slotIndex >= getRecordCount()){
             throw new IllegalArgumentException("Invalid index");
         }
 
