@@ -14,6 +14,14 @@ public class DiskManager {
     }
 
 
+    public int getPageCount(){
+        try {
+            return (int) file.length() / Page.PAGE_SIZE;
+        } catch (java.io.IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 
     public Page loadPage(int pageId){
         try {
@@ -39,13 +47,30 @@ public class DiskManager {
         try{
             long pageOffset = (long) page.getPageId() * Page.PAGE_SIZE;
 
-            if (pageOffset > file.length()){
+            if (pageOffset >= file.length()){
                 throw new IllegalArgumentException("Page doesn't exist");
             }
 
             file.seek(pageOffset);
 
             file.write(page.getData());
+
+        } catch (java.io.IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public Page makeNewPage(){
+        try {
+            int pageId = getPageCount();
+
+            file.seek(pageId * Page.PAGE_SIZE);
+
+            Page page = new Page(pageId);
+
+            file.write(page.getData());
+
+            return page;
 
         } catch (java.io.IOException e) {
             throw new RuntimeException(e);
