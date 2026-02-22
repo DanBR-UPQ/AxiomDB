@@ -69,7 +69,7 @@ public class SlottedPage {
 
 
 
-    // ---------------- CRUD ----------------
+    // ---------------- PUBLIC FUNCTIONS ----------------
     public int insertRecord(byte[] recordData){
         int recordSize = recordData.length;
         int freeOffset = getFreeSpaceOffset();
@@ -111,4 +111,25 @@ public class SlottedPage {
 
         return record;
     }
+
+
+    public int getPageId(){
+        return page.getPageId();
+    }
+    public int getSlotCount() {
+        return getRecordCount();
+    }
+    public boolean hasSpace(int recordSize){
+        int RecordWriteEnd = getFreeSpaceOffset() + recordSize;
+        int slotPosition = getPageSize() - (getRecordCount() + 1) * 4;
+        
+        return RecordWriteEnd <= slotPosition;
+    }
+    public int getFreeSpaceSize(){
+        int RecordWriteEnd = getFreeSpaceOffset();
+        int slotPosition = getPageSize() - (getRecordCount() + 1) * 4;
+        
+        return slotPosition - RecordWriteEnd;
+    }
+
 }
