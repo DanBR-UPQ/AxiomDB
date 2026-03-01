@@ -31,7 +31,17 @@ public class Table {
         diskManager.writePage(newPage);
         return new RecordId(newPage.getPageId(), slotId);
         
+    }
 
+
+    public byte[] read(RecordId recordId, int recordSize){
+
+        Page page = diskManager.loadPage(recordId.getPageId());
+        SlottedPage slottedPage = new SlottedPage(page);
+
+        byte[] data = slottedPage.readRecord(recordId.getSlotId(), recordSize);
+
+        return data;
     }
 
 }
