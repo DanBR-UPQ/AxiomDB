@@ -58,12 +58,17 @@ public class SlottedPage {
 
     // ---------------- Reading / Accesing helpers ----------------
     private int getSlotPosition(int slotIndex){ // slot 0 = 4096 - (0 + 1) * 4 = 4092, slot 0 is at 4092 bytes
-        return getPageSize() - (slotIndex + 1) * 4;
+        return getPageSize() - (slotIndex + 1) * 8;
     }
 
     private int getSlotOffset(int slotIndex){ // slot 0 = 8 record starts at 8 bytes for example
         int slotPosition = getSlotPosition(slotIndex);
         return readInt(slotPosition);
+    }
+
+    private int getSlotLength(int slotIndex){ // it's stored 4 bytes after slotOffset
+        int slotPosition = getSlotPosition(slotIndex);
+        return readInt(slotPosition + 4);
     }
     // slotIndex is our record ID
 
@@ -77,7 +82,7 @@ public class SlottedPage {
 
 
         int recordWriteEnd = freeOffset + recordSize;
-        int slotPosition = getPageSize() - (recordCount + 1) * 4;
+        int slotPosition = getPageSize() - (recordCount + 1) * 8;
 
         if (recordWriteEnd > slotPosition){
             throw new RuntimeException("Page is full");
@@ -89,6 +94,7 @@ public class SlottedPage {
         // slotPos = pageSize - (slotIndex + 1) * 4
         // eg slot 0 = 4096 - (0 + 1) * 4 = 4092
         writeInt(slotPosition, freeOffset);
+        writeInt(slotPosition + 4, recordSize);
 
 
         setRecordCount(recordCount + 1);
@@ -98,12 +104,15 @@ public class SlottedPage {
     }
 
 
-    public byte[] readRecord(int slotIndex, int recordSize){
-        byte[] record = new byte[recordSize];
+    public byte[] readRecord(int slotIndex){
 
         if(slotIndex < 0 || slotIndex >= getRecordCount()){
             throw new IllegalArgumentException("Invalid index");
         }
+
+        int recordSize = getSlotLength(slotIndex);
+
+        byte[] record = new byte[recordSize];
 
         int recordOffset = getSlotOffset(slotIndex);
 
@@ -121,13 +130,13 @@ public class SlottedPage {
     }
     public boolean hasSpace(int recordSize){
         int RecordWriteEnd = getFreeSpaceOffset() + recordSize;
-        int slotPosition = getPageSize() - (getRecordCount() + 1) * 4;
+        int slotPosition = getPageSize() - (getRecordCount() + 1) * 8;
         
         return RecordWriteEnd <= slotPosition;
     }
     public int getFreeSpaceSize(){
         int RecordWriteEnd = getFreeSpaceOffset();
-        int slotPosition = getPageSize() - (getRecordCount() + 1) * 4;
+        int slotPosition = getPageSize() - (getRecordCount() + 1) * 8;
         
         return slotPosition - RecordWriteEnd;
     }

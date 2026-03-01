@@ -13,8 +13,7 @@ public class Table {
             Page page = diskManager.loadPage(i);
             SlottedPage slottedPage = new SlottedPage(page);
 
-            if (slottedPage.hasSpace(data.length)){ // pretending data.length is it's actual size for now
-            //Todo: Add proper space detection
+            if (slottedPage.hasSpace(data.length)){
                 
                 int SlotId = slottedPage.insertRecord(data);
             
@@ -34,12 +33,12 @@ public class Table {
     }
 
 
-    public byte[] read(RecordId recordId, int recordSize){
+    public byte[] read(RecordId recordId){
 
         Page page = diskManager.loadPage(recordId.getPageId());
         SlottedPage slottedPage = new SlottedPage(page);
 
-        byte[] data = slottedPage.readRecord(recordId.getSlotId(), recordSize);
+        byte[] data = slottedPage.readRecord(recordId.getSlotId());
 
         return data;
     }
