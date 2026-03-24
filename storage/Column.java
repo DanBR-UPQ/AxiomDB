@@ -26,5 +26,6 @@ public class Column {
     public DataType getType() { return type; }
 
     public int getLength() { return length; }
+    public int getSize() { return length; }
 
 }

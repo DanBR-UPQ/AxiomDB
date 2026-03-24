@@ -35,7 +35,7 @@ public class Schema {
     }
 
 
-    public int getRecordSize(){
+    public int getRecordSize(){ // size in bytes
         int recordSize = 0;
 
         for (Column column : columns){
@@ -83,7 +83,7 @@ public class Schema {
 
     public List<Column> getColumns() { return columns; }
 
-    public Column getColumns(int index) { return columns.get(index); }
+    public Column getColumn(int index) { return columns.get(index); }
 
     public int getColumnCount() { return columns.size(); }
 }
