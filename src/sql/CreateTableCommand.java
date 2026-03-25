@@ -22,7 +22,7 @@ public class CreateTableCommand implements SQLCommand {
     @Override
     public Result execute(TableManager tableManager){
         tableManager.createTable(tableName, schema);
-        return null;
+        return Result.withMessage("OK");
     }
 
     public String getTableName() { return tableName; }

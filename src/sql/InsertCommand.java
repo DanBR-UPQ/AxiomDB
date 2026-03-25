@@ -1,11 +1,10 @@
 package sql;
 
-import java.util.List;
-
+import execution.Result;
 import execution.Table;
 import execution.TableManager;
 import execution.TableMetadata;
-import execution.Result;
+import java.util.List;
 import schema.Schema;
 import serialization.RecordSerializer;
 
@@ -36,7 +35,7 @@ public class InsertCommand implements SQLCommand {
         byte[] record = serializer.serialize(values);
 
         table.insert(record);
-        return null;
+        return Result.withMessage("OK");
     }
 
 
