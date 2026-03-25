@@ -1,3 +1,4 @@
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,5 +35,19 @@ public class TableManager {
 
         TableMetadata metadata = new TableMetadata(tableName, schema);
         metadata.saveSchema();
+
+        String dataFileName = tableName + ".data";
+        File file = new File(dataFileName);
+
+        try {
+            if (!file.exists()){
+                file.createNewFile();
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to create data file for table: " + tableName);
+        }
+
+        Table table = new Table(dataFileName);
+        tables.put(tableName, table);
     }
 }
