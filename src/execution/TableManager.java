@@ -1,6 +1,9 @@
+package execution;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+
+import schema.Schema;
 
 public class TableManager {
     private final Map<String, Table> tables;

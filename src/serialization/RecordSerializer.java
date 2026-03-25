@@ -1,6 +1,11 @@
+package serialization;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
+
+import schema.Column;
+import schema.DataType;
+import schema.Schema;
 
 
 public class RecordSerializer {

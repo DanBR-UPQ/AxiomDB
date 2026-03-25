@@ -1,3 +1,4 @@
+package storage;
 
 public class Page {
     public static final int PAGE_SIZE = 4096;

@@ -1,3 +1,5 @@
+package storage;
+
 public class RecordId {
     private final int PageId;
     private final int SlotId;

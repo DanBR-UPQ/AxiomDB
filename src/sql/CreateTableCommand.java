@@ -1,5 +1,9 @@
 package sql;
 
+import execution.Result;
+import execution.TableManager;
+import schema.Schema;
+
 public class CreateTableCommand implements SQLCommand {
     private final String tableName;
     private final Schema schema;

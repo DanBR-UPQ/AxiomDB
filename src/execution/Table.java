@@ -1,5 +1,11 @@
-public class Table {
-    
+package execution;
+
+import storage.DiskManager;
+import storage.Page;
+import storage.RecordId;
+import storage.SlottedPage;
+
+public class Table {    
     private final DiskManager diskManager;
 
     public Table(String fileName){
@@ -43,4 +49,5 @@ public class Table {
         return data;
     }
 
+    public DiskManager getDiskManager() { return diskManager; }
 }

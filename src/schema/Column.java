@@ -1,3 +1,4 @@
+package schema;
 public class Column {
     private final String name;
     private final DataType type;
